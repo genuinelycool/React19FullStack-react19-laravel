@@ -1,3 +1,4 @@
+import { Counter } from "./components/feature/Counter";
 import { UserCard } from "./components/feature/UserCard";
 import Header from "./components/layout/Header";
 import { Button } from "./components/ui/Button";
@@ -24,12 +25,14 @@ function App() {
       {/* <UserCard firstname="Programming Fields" technology="React" /> */}
 
       {/* Passing DYNAMIC PROPS */}
-      <UserCard firstname={firstName} technology={technology} />
+      {/* <UserCard firstname={firstName} technology={technology} />
       <UserCard firstname={user.firstName} technology={user.technology} />
-      <UserCard />
+      <UserCard /> */}
 
       {/* <Button clickHandle={ () => alert('Alert from Parent') } /> */}
-      <Button clickHandle={showAlert} />
+      {/* <Button clickHandle={showAlert} /> */}
+
+      <Counter />
     </>
   );
 }

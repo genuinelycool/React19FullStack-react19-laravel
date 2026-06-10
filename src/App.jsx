@@ -2,19 +2,20 @@ import { Counter } from "./components/feature/Counter";
 import { UserCard } from "./components/feature/UserCard";
 import Header from "./components/layout/Header";
 import { Button } from "./components/ui/Button";
+import { Posts } from "./components/feature/Posts";
 
 function App() {
-  const firstName = "Programming Fields";
-  const technology = "React";
+  // const firstName = "Programming Fields";
+  // const technology = "React";
 
-  const user = {
-    firstName: "Programming Fields",
-    technology: "Full stack Devs.",
-  };
+  // const user = {
+  //   firstName: "Programming Fields",
+  //   technology: "Full stack Devs.",
+  // };
 
-  function showAlert() {
-    alert("Alert from Parent");
-  }
+  // function showAlert() {
+  //   alert("Alert from Parent");
+  // }
 
   return (
     <>
@@ -32,7 +33,9 @@ function App() {
       {/* <Button clickHandle={ () => alert('Alert from Parent') } /> */}
       {/* <Button clickHandle={showAlert} /> */}
 
-      <Counter />
+      {/* <Counter /> */}
+
+      <Posts />
     </>
   );
 }

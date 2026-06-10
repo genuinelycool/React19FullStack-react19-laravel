@@ -3,6 +3,8 @@ import { UserCard } from "./components/feature/UserCard";
 import Header from "./components/layout/Header";
 import { Button } from "./components/ui/Button";
 import { Posts } from "./components/feature/Posts";
+import { Registration } from "./components/feature/Registration";
+import { Uncontrolled } from "./components/feature/Uncontrolled";
 
 function App() {
   // const firstName = "Programming Fields";
@@ -35,7 +37,10 @@ function App() {
 
       {/* <Counter /> */}
 
-      <Posts />
+      {/* <Posts /> */}
+
+      <Registration />
+      <Uncontrolled />
     </>
   );
 }

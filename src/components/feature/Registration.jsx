@@ -54,20 +54,28 @@ export const Registration = () => {
       //   .then((response) => response.json())
       //   .then((data) => console.log(data));
 
+      const payload = {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.confirmPassword
+      }
+
       const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users",
+        "http://localhost:8000/api/register",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(payload),
         },
       );
       const data = await response.json();
       console.log(data);
 
-      setServerResponse("User Registered successfully!");
+      // setServerResponse("User Registered successfully!");
+      setServerResponse(data.message);
       setIsLoading(false);
     } catch (error) {
       console.log("API Error: ", error);
@@ -229,7 +237,7 @@ export const Registration = () => {
 
         {/* Server Response */}
         {serverResponse && (
-          <p className="mt-4 text-center text-green-600 bg-green-800">
+          <p className="mt-4 text-center text-green-800 bg-green-400 rounded p-1">
             {serverResponse}
           </p>
         )}

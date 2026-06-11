@@ -27,14 +27,11 @@ export const Registration = () => {
   };
 
   // Handle submit
-  // const handleSubmit = (e) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate form
     const isValid = validateForm();
-
-    // console.log(errors);
 
     if (!isValid) return;
 
@@ -47,34 +44,21 @@ export const Registration = () => {
     console.log(formData);
 
     try {
-      // fetch("https://jsonplaceholder.typicode.com/users", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(formData),
-      // })
-      //   .then((response) => response.json())
-      //   .then((data) => console.log(data));
-
       const payload = {
         fullName: formData.fullName,
         email: formData.email,
         password: formData.password,
-        password_confirmation: formData.confirmPassword
-      }
+        password_confirmation: formData.confirmPassword,
+      };
 
-      const response = await fetch(
-        "http://localhost:8000/api/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "accept": "application/json"
-          },
-          body: JSON.stringify(payload),
+      const response = await fetch("http://localhost:8000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
         },
-      );
+        body: JSON.stringify(payload),
+      });
       const data = await response.json();
       console.log(data);
 
@@ -82,13 +66,13 @@ export const Registration = () => {
         if (response.status === 422 && data.errors) {
           setErrors((prev) => ({
             ...prev,
-            ...data.errors
+            ...data.errors,
           }));
 
           // set toast message
           setServerResponse({
             type: "error",
-            message: data.message
+            message: data.message,
           });
         }
 
@@ -99,11 +83,10 @@ export const Registration = () => {
       // Reset errors
       setErrors({});
 
-      // setServerResponse("User Registered successfully!");
       //Success API Response
       setServerResponse({
         type: "success",
-        message: data.message
+        message: data.message,
       });
 
       setIsLoading(false);
@@ -120,12 +103,11 @@ export const Registration = () => {
     const timer = setTimeout(() => {
       setServerResponse({
         type: "",
-        message: ""
-      })
+        message: "",
+      });
     }, 3000);
 
     return () => clearTimeout(timer);
-
   }, [serverResponse.message]);
 
   const validateForm = () => {

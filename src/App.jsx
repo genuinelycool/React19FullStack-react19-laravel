@@ -5,8 +5,12 @@ import { Button } from "./components/ui/Button";
 import { Posts } from "./components/feature/Posts";
 import { Registration } from "./components/feature/Registration";
 import { Uncontrolled } from "./components/feature/Uncontrolled";
+import { Login } from "./components/feature/Login";
+import { useState } from "react";
 
 function App() {
+  const [showLogin, setShowLogin] = useState(false);
+
   // const firstName = "Programming Fields";
   // const technology = "React";
 
@@ -39,8 +43,38 @@ function App() {
 
       {/* <Posts /> */}
 
-      <Registration />
+      {/* <Registration /> */}
       {/* <Uncontrolled /> */}
+
+      {/* <Login /> */}
+
+      <div>
+        {showLogin ? <Login /> : <Registration />}
+
+        <div className="text-center">
+          {showLogin ? (
+            <p>
+              Don't have an account?{" "}
+              <button
+                className="text-blue-600 underline cursor-pointer"
+                onClick={() => setShowLogin(false)}
+              >
+                Register
+              </button>
+            </p>
+          ) : (
+            <p>
+              Already have an account?{" "}
+              <button
+                className="text-blue-600 underline cursor-pointer"
+                onClick={() => setShowLogin(true)}
+              >
+                Login
+              </button>
+            </p>
+          )}
+        </div>
+      </div>
     </>
   );
 }

@@ -3,6 +3,8 @@ import { useState } from "react";
 export const Registration = () => {
   const [errors, setErrors] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [serverResponse, setServerResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Initial values from form inputs
   const [formData, setFormData] = useState({
@@ -22,7 +24,8 @@ export const Registration = () => {
   };
 
   // Handle submit
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate form
@@ -34,9 +37,42 @@ export const Registration = () => {
 
     // ------------
 
+    setIsLoading(true);
+
     setIsFormSubmitted(true);
 
     console.log(formData);
+
+    try {
+      // fetch("https://jsonplaceholder.typicode.com/users", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(formData),
+      // })
+      //   .then((response) => response.json())
+      //   .then((data) => console.log(data));
+
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+      const data = await response.json();
+      console.log(data);
+
+      setServerResponse("User Registered successfully!");
+      setIsLoading(false);
+    } catch (error) {
+      console.log("API Error: ", error);
+      setIsLoading(false);
+    }
   };
 
   const validateForm = () => {
@@ -190,6 +226,13 @@ export const Registration = () => {
             </button>
           </div>
         </form>
+
+        {/* Server Response */}
+        {serverResponse && (
+          <p className="mt-4 text-center text-green-600 bg-green-800">
+            {serverResponse}
+          </p>
+        )}
 
         {/* Form preview */}
         {isFormSubmitted && (

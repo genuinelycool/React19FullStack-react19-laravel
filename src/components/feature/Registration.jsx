@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Registration = () => {
   const [errors, setErrors] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [serverResponse, setServerResponse] = useState("");
+  const [serverResponse, setServerResponse] = useState({
+    type: "",
+    message: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   // Initial values from form inputs
@@ -31,7 +34,7 @@ export const Registration = () => {
     // Validate form
     const isValid = validateForm();
 
-    console.log(errors);
+    // console.log(errors);
 
     if (!isValid) return;
 
@@ -67,6 +70,7 @@ export const Registration = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "accept": "application/json"
           },
           body: JSON.stringify(payload),
         },
@@ -74,14 +78,55 @@ export const Registration = () => {
       const data = await response.json();
       console.log(data);
 
+      if (!response.ok) {
+        if (response.status === 422 && data.errors) {
+          setErrors((prev) => ({
+            ...prev,
+            ...data.errors
+          }));
+
+          // set toast message
+          setServerResponse({
+            type: "error",
+            message: data.message
+          });
+        }
+
+        setIsLoading(false);
+        return;
+      }
+
+      // Reset errors
+      setErrors({});
+
       // setServerResponse("User Registered successfully!");
-      setServerResponse(data.message);
+      //Success API Response
+      setServerResponse({
+        type: "success",
+        message: data.message
+      });
+
       setIsLoading(false);
     } catch (error) {
       console.log("API Error: ", error);
       setIsLoading(false);
     }
   };
+
+  // Hide Toaster
+  useEffect(() => {
+    if (!serverResponse.message) return;
+
+    const timer = setTimeout(() => {
+      setServerResponse({
+        type: "",
+        message: ""
+      })
+    }, 3000);
+
+    return () => clearTimeout(timer);
+
+  }, [serverResponse.message]);
 
   const validateForm = () => {
     let newErrors = {};
@@ -236,14 +281,20 @@ export const Registration = () => {
         </form>
 
         {/* Server Response */}
-        {serverResponse && (
-          <p className="mt-4 text-center text-green-800 bg-green-400 rounded p-1">
-            {serverResponse}
+        {serverResponse.message && (
+          <p
+            className={`mt-4 text-center rounded p-1 border ${
+              serverResponse.type === "error"
+                ? "text-red-800 bg-red-200 border-red-300"
+                : "text-green-800 bg-green-200 border-green-300"
+            }`}
+          >
+            {serverResponse.message}
           </p>
         )}
 
         {/* Form preview */}
-        {isFormSubmitted && (
+        {isFormSubmitted && formData.fullName && (
           <div className="mt-6 bg-gray-50 p-4 rounded-md border border-gray-300 space-y-4">
             <h3 className="font-semibold mb-5 border-b border-gray-300 pb-2">
               Form Preview

@@ -72,6 +72,9 @@ export const Login = () => {
       // Reset errors
       setErrors({});
 
+      // Token in local storage
+      localStorage.setItem("token", data.token);
+
       //Success API Response
       setServerResponse({
         type: "success",

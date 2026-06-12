@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const Login = () => {
+export const Login = ({ setPage }) => {
   const [errors, setErrors] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [serverResponse, setServerResponse] = useState({
@@ -80,6 +80,9 @@ export const Login = () => {
         type: "success",
         message: data.message,
       });
+
+      // Set the page for redirection
+      setPage("dashboard");
 
       setIsLoading(false);
     } catch (error) {

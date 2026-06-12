@@ -7,9 +7,14 @@ import { Registration } from "./components/feature/Registration";
 import { Uncontrolled } from "./components/feature/Uncontrolled";
 import { Login } from "./components/feature/Login";
 import { useState } from "react";
+import { Dashboard } from "./components/feature/Dashboard";
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false);
+  // const [showLogin, setShowLogin] = useState(false);
+
+  const [page, setPage] = useState(
+    localStorage.getItem("token") ? "dashboard" : "login",
+  );
 
   // const firstName = "Programming Fields";
   // const technology = "React";
@@ -49,31 +54,37 @@ function App() {
       {/* <Login /> */}
 
       <div>
-        {showLogin ? <Login /> : <Registration />}
+        {/* {showLogin ? <Login /> : <Registration />} */}
 
-        <div className="text-center">
-          {showLogin ? (
-            <p>
-              Don't have an account?{" "}
-              <button
-                className="text-blue-600 underline cursor-pointer"
-                onClick={() => setShowLogin(false)}
-              >
-                Register
-              </button>
-            </p>
-          ) : (
-            <p>
-              Already have an account?{" "}
-              <button
-                className="text-blue-600 underline cursor-pointer"
-                onClick={() => setShowLogin(true)}
-              >
-                Login
-              </button>
-            </p>
-          )}
-        </div>
+        {page === "register" && <Registration setPage={setPage} />}
+        {page === "login" && <Login setPage={setPage} />}
+        {page === "dashboard" && <Dashboard setPage={setPage} />}
+
+        {(page === "register" || page === "login") && (
+          <div className="text-center">
+            {page === "login" ? (
+              <p>
+                Don't have an account?{" "}
+                <button
+                  className="text-blue-600 underline cursor-pointer"
+                  onClick={() => setPage("register")}
+                >
+                  Register
+                </button>
+              </p>
+            ) : (
+              <p>
+                Already have an account?{" "}
+                <button
+                  className="text-blue-600 underline cursor-pointer"
+                  onClick={() => setPage("login")}
+                >
+                  Login
+                </button>
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

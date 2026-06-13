@@ -3,12 +3,16 @@ import { Login } from "./components/feature/Login";
 import { Dashboard } from "./components/feature/Dashboard";
 import { Route, Routes } from "react-router";
 import { ProtectedRoutes } from "./routes/ProtectedRoutes";
+import { PublicRoutes } from "./routes/PublicRoutes";
 
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Registration />} />
+      {/* Public Routes */}
+      <Route element={<PublicRoutes />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Registration />} />
+      </Route>
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoutes />}>

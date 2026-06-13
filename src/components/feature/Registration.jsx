@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 
 export const Registration = () => {
   const [errors, setErrors] = useState({});
@@ -261,6 +262,13 @@ export const Registration = () => {
             </button>
           </div>
         </form>
+
+        <p className="text-center mt-4">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600 underline cursor-pointer">
+            Login
+          </Link>
+        </p>
 
         {/* Server Response */}
         {serverResponse.message && (

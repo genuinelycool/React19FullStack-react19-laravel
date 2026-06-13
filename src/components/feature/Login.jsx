@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
 
 export const Login = ({ setPage }) => {
+  const navigate = useNavigate();
+
+  console.log(navigate);
+
   const [errors, setErrors] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [serverResponse, setServerResponse] = useState({
@@ -82,7 +87,10 @@ export const Login = ({ setPage }) => {
       });
 
       // Set the page for redirection
-      setPage("dashboard");
+      // setPage("dashboard");
+
+      // Navigation
+      navigate("/dashboard");
 
       setIsLoading(false);
     } catch (error) {
@@ -194,6 +202,16 @@ export const Login = ({ setPage }) => {
             </button>
           </div>
         </form>
+
+        <p className="text-center mt-4">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-600 underline cursor-pointer"
+          >
+            Register
+          </Link>
+        </p>
 
         {/* Server Response */}
         {serverResponse.message && (

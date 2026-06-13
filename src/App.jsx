@@ -8,53 +8,22 @@ import { Uncontrolled } from "./components/feature/Uncontrolled";
 import { Login } from "./components/feature/Login";
 import { useState } from "react";
 import { Dashboard } from "./components/feature/Dashboard";
+import { Route, Routes } from "react-router";
 
 function App() {
-  // const [showLogin, setShowLogin] = useState(false);
-
   const [page, setPage] = useState(
     localStorage.getItem("token") ? "dashboard" : "login",
   );
 
-  // const firstName = "Programming Fields";
-  // const technology = "React";
-
-  // const user = {
-  //   firstName: "Programming Fields",
-  //   technology: "Full stack Devs.",
-  // };
-
-  // function showAlert() {
-  //   alert("Alert from Parent");
-  // }
-
   return (
     <>
-      {/* <Header />
-      <h1>Hey this is App component!</h1> */}
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Registration />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
 
-      {/* Passing STATIC PROPS */}
-      {/* <UserCard firstname="Programming Fields" technology="React" /> */}
-
-      {/* Passing DYNAMIC PROPS */}
-      {/* <UserCard firstname={firstName} technology={technology} />
-      <UserCard firstname={user.firstName} technology={user.technology} />
-      <UserCard /> */}
-
-      {/* <Button clickHandle={ () => alert('Alert from Parent') } /> */}
-      {/* <Button clickHandle={showAlert} /> */}
-
-      {/* <Counter /> */}
-
-      {/* <Posts /> */}
-
-      {/* <Registration /> */}
-      {/* <Uncontrolled /> */}
-
-      {/* <Login /> */}
-
-      <div>
-        {/* {showLogin ? <Login /> : <Registration />} */}
+      {/* <div>
 
         {page === "register" && <Registration setPage={setPage} />}
         {page === "login" && <Login setPage={setPage} />}
@@ -85,7 +54,7 @@ function App() {
             )}
           </div>
         )}
-      </div>
+      </div> */}
     </>
   );
 }

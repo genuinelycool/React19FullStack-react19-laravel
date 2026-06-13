@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 export const Dashboard = ({ setPage }) => {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProfile();
   }, []);
 
+  // Profile
   const getProfile = async () => {
     const token = localStorage.getItem("token");
 
@@ -21,7 +24,7 @@ export const Dashboard = ({ setPage }) => {
 
       if (apiResponse.status === 401) {
         localStorage.removeItem("token");
-        setPage("login");
+        navigate("/login");
 
         return;
       }
@@ -43,16 +46,16 @@ export const Dashboard = ({ setPage }) => {
         },
       });
 
-      if (apiResponse.status === 401) {
-        localStorage.removeItem("token");
-        setPage("login");
+      // if (apiResponse.status === 401) {
+      //   localStorage.removeItem("token");
+      //   navigate("/login");
 
-        return;
-      }
+      //   return;
+      // }
 
       await apiResponse.json();
 
-      setPage("login");
+      navigate("/login");
       localStorage.removeItem("token");
     } catch (error) {
       console.error(error);

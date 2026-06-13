@@ -33,6 +33,32 @@ export const Dashboard = ({ setPage }) => {
     }
   };
 
+  // Logout
+  const logout = async () => {
+    try {
+      const apiResponse = await fetch("http://localhost:8000/api/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (apiResponse.status === 401) {
+        localStorage.removeItem("token");
+        setPage("login");
+
+        return;
+      }
+
+      await apiResponse.json();
+
+      setPage("login");
+      localStorage.removeItem("token");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl text-center">
@@ -44,6 +70,12 @@ export const Dashboard = ({ setPage }) => {
               Welcome, <strong>{user.name} </strong>
             </p>
             <p>{user.email}</p>
+            <button
+              onClick={logout}
+              className="mt-4 cursor-pointer bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Logout
+            </button>
           </>
         ) : (
           <p>Loading profile...</p>

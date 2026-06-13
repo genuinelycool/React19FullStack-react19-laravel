@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-export const Dashboard = ({ setPage }) => {
+export const Dashboard = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -21,13 +21,6 @@ export const Dashboard = ({ setPage }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      if (apiResponse.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/login");
-
-        return;
-      }
 
       const response = await apiResponse.json();
       setUser(response.data);

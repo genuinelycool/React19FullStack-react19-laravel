@@ -46,13 +46,6 @@ export const Dashboard = ({ setPage }) => {
         },
       });
 
-      // if (apiResponse.status === 401) {
-      //   localStorage.removeItem("token");
-      //   navigate("/login");
-
-      //   return;
-      // }
-
       await apiResponse.json();
 
       navigate("/login");

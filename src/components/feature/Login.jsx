@@ -86,9 +86,6 @@ export const Login = ({ setPage }) => {
         message: data.message,
       });
 
-      // Set the page for redirection
-      // setPage("dashboard");
-
       // Navigation
       navigate("/dashboard");
 

@@ -22,39 +22,6 @@ function App() {
         <Route path="/register" element={<Registration />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
-
-      {/* <div>
-
-        {page === "register" && <Registration setPage={setPage} />}
-        {page === "login" && <Login setPage={setPage} />}
-        {page === "dashboard" && <Dashboard setPage={setPage} />}
-
-        {(page === "register" || page === "login") && (
-          <div className="text-center">
-            {page === "login" ? (
-              <p>
-                Don't have an account?{" "}
-                <button
-                  className="text-blue-600 underline cursor-pointer"
-                  onClick={() => setPage("register")}
-                >
-                  Register
-                </button>
-              </p>
-            ) : (
-              <p>
-                Already have an account?{" "}
-                <button
-                  className="text-blue-600 underline cursor-pointer"
-                  onClick={() => setPage("login")}
-                >
-                  Login
-                </button>
-              </p>
-            )}
-          </div>
-        )}
-      </div> */}
     </>
   );
 }

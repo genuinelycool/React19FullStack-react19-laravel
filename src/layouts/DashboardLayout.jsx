@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export const DashboardLayout = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     getProfile();
@@ -61,7 +61,7 @@ export const DashboardLayout = () => {
 
         {/* Main Content Area */}
         <main className="p-6">
-          <Outlet />
+          <Outlet context={{ user }} />
         </main>
       </div>
     </div>

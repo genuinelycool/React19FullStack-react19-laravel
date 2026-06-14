@@ -20,7 +20,7 @@ function App() {
       <Route element={<ProtectedRoutes />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/Profile/:id" element={<Profile />} />
+          <Route path="/dashboard/Profile" element={<Profile />} />
         </Route>
       </Route>
     </Routes>

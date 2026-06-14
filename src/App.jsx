@@ -1,9 +1,10 @@
-import { Registration } from "./components/feature/Registration";
-import { Login } from "./components/feature/Login";
+import { Registration } from "./pages/auth/Registration";
+import { Login } from "./pages/auth/Login";
 import { Dashboard } from "./components/feature/Dashboard";
 import { Route, Routes } from "react-router";
 import { ProtectedRoutes } from "./routes/ProtectedRoutes";
 import { PublicRoutes } from "./routes/PublicRoutes";
+import { DashboardLayout } from "./layouts/DashboardLayout";
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoutes />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Route>
     </Routes>
   );

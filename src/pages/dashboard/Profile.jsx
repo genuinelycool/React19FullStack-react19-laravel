@@ -1,12 +1,7 @@
-// import { useOutletContext } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 
 export const Profile = () => {
   const { user } = useAuth();
-
-  //   console.log(useOutletContext());
-  // const { user } = useOutletContext();
-  //   console.log(user);
 
   return (
     <div className="max-w-xl bg-white shadow rounded p-6">

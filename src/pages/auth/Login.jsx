@@ -4,7 +4,6 @@ import { useAuth } from "../../context/AuthContext";
 
 export const Login = () => {
   const navigate = useNavigate();
-  // console.log(navigate);
 
   const { getProfile } = useAuth();
 
@@ -26,8 +25,6 @@ export const Login = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // console.log(name, value);
-
     setFormData({ ...formData, [name]: value });
   };
 
@@ -46,8 +43,6 @@ export const Login = () => {
 
     setIsFormSubmitted(true);
 
-    // console.log(formData);
-
     try {
       const response = await fetch("http://localhost:8000/api/login", {
         method: "POST",
@@ -59,7 +54,6 @@ export const Login = () => {
       });
 
       const data = await response.json();
-      // console.log(data);
 
       if (!response.ok) {
         setErrors((prev) => ({

@@ -6,7 +6,6 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  //   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

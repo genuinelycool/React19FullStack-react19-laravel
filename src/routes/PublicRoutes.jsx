@@ -3,8 +3,6 @@ import { useAuth } from "../context/AuthContext";
 
 export const PublicRoutes = () => {
   const { user, loading } = useAuth();
-  // console.log("user", user, "loading", loading);
-  // console.log(useAuth());
 
   if (loading) return null;
 

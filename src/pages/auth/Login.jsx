@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useAuth } from "../../context/AuthContext";
 
-export const Login = ({ setPage }) => {
+export const Login = () => {
   const navigate = useNavigate();
+  // console.log(navigate);
 
-  console.log(navigate);
+  const { getProfile } = useAuth();
 
   const [errors, setErrors] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -24,7 +26,7 @@ export const Login = ({ setPage }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    console.log(name, value);
+    // console.log(name, value);
 
     setFormData({ ...formData, [name]: value });
   };
@@ -44,7 +46,7 @@ export const Login = ({ setPage }) => {
 
     setIsFormSubmitted(true);
 
-    console.log(formData);
+    // console.log(formData);
 
     try {
       const response = await fetch("http://localhost:8000/api/login", {
@@ -55,8 +57,9 @@ export const Login = ({ setPage }) => {
         },
         body: JSON.stringify(formData),
       });
+
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
 
       if (!response.ok) {
         setErrors((prev) => ({
@@ -85,6 +88,9 @@ export const Login = ({ setPage }) => {
         type: "success",
         message: data.message,
       });
+
+      // Fetch user immediately
+      await getProfile();
 
       // Navigation
       navigate("/dashboard");

@@ -1,11 +1,12 @@
 import { Navigate, Outlet } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 export const PublicRoutes = () => {
-  const token = localStorage.getItem("token");
+  const { user, loading } = useAuth();
+  // console.log("user", user, "loading", loading);
+  // console.log(useAuth());
 
-  if (token) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  if (loading) return null;
 
-  return <Outlet />;
+  return user ? <Navigate to="/dashboard" replace /> : <Outlet />;
 };

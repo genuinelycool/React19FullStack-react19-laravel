@@ -9,18 +9,6 @@ export const Header = ({ user, logout }) => {
     <header className="flex justify-between items-center bg-white shadow px-6 py-3">
       <h1 className="text-lg font-semibold">Dashboard</h1>
 
-      {/* <div className="flex items-center gap-4">
-        {user ? (
-          <>
-            <p>
-              Welcome, <strong>{user.name} </strong>
-            </p>
-          </>
-        ) : (
-          <p>Loading profile...</p>
-        )}
-      </div> */}
-
       {/* Profile dropdown */}
       <div className="relative">
         <button

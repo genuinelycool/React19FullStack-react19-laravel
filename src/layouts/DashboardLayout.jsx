@@ -1,54 +1,10 @@
-import { Outlet, useNavigate } from "react-router";
+import { Outlet } from "react-router";
 import { Header } from "../components/common/Header";
 import { Sidebar } from "../components/common/Sidebar";
-import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export const DashboardLayout = () => {
-  const navigate = useNavigate();
-  const [user, setUser] = useState("");
-
-  useEffect(() => {
-    getProfile();
-  }, []);
-
-  // Logout
-  const logout = async () => {
-    try {
-      const apiResponse = await fetch("http://localhost:8000/api/logout", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      await apiResponse.json();
-
-      navigate("/login");
-      localStorage.removeItem("token");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // Profile
-  const getProfile = async () => {
-    const token = localStorage.getItem("token");
-
-    try {
-      const apiResponse = await fetch("http://localhost:8000/api/profile", {
-        headers: {
-          "Content-Type": "application/json",
-          accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const response = await apiResponse.json();
-      setUser(response.data);
-    } catch (error) {
-      console.error("Profile error", error);
-    }
-  };
+  const { user, logout } = useAuth();
 
   return (
     <div className="flex">
@@ -61,7 +17,7 @@ export const DashboardLayout = () => {
 
         {/* Main Content Area */}
         <main className="p-6">
-          <Outlet context={{ user }} />
+          <Outlet />
         </main>
       </div>
     </div>

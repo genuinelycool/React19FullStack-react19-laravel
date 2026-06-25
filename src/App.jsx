@@ -7,6 +7,7 @@ import { PublicRoutes } from "./routes/PublicRoutes";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { Profile } from "./pages/dashboard/Profile";
 import { AuthProvider } from "./context/AuthContext";
+import { UsersList } from "./pages/users/UsersList";
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/Profile" element={<Profile />} />
+
+            {/* Users Route */}
+            <Route path="/dashboard/users" element={<UsersList />} />
           </Route>
         </Route>
       </Routes>

@@ -11,6 +11,7 @@ export const Sidebar = () => {
       <nav>
         <NavLink
           to="/dashboard"
+          end
           className={({ isActive }) =>
             `block rounded m-1 px-3 py-2 ${isActive ? "bg-gray-700" : "hover:bg-gray-700"} `
           }
@@ -23,7 +24,7 @@ export const Sidebar = () => {
             `block rounded m-1 px-3 py-2 ${isActive ? "bg-gray-700" : "hover:bg-gray-700"} `
           }
         >
-          Users (coming soon)
+          Users
         </NavLink>
         <NavLink
           to="/dashboard/posts"

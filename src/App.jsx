@@ -8,6 +8,7 @@ import { DashboardLayout } from "./layouts/DashboardLayout";
 import { Profile } from "./pages/dashboard/Profile";
 import { AuthProvider } from "./context/AuthContext";
 import { UsersList } from "./pages/users/UsersList";
+import { CreateUser } from "./pages/users/CreateUser";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
 
             {/* Users Route */}
             <Route path="/dashboard/users" element={<UsersList />} />
+            <Route path="/dashboard/users/create" element={<CreateUser />} />
           </Route>
         </Route>
       </Routes>

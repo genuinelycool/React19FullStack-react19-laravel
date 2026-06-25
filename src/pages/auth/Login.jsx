@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 export const Login = () => {
   const navigate = useNavigate();
 
-  const { getProfile } = useAuth();
+  const { getProfile, setToken } = useAuth();
 
   const [errors, setErrors] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -76,6 +76,9 @@ export const Login = () => {
 
       // Token in local storage
       localStorage.setItem("token", data.token);
+
+      // Set Auth Token
+      setToken(data.token);
 
       //Success API Response
       setServerResponse({

@@ -4,9 +4,17 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 
 export const CreateUser = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    watch,
+    formState: { errors },
+  } = useForm();
   const { token } = useAuth();
   const navigate = useNavigate();
+
+  // console.log(watch("password"));
 
   //   Form submit
   const submitForm = async (data) => {
@@ -14,9 +22,21 @@ export const CreateUser = () => {
       await userService.createUser(data, token);
       navigate("/dashboard/users");
     } catch (error) {
-      console.error(error);
+      // console.error(error.errors);
+
+      if (error.errors) {
+        Object.entries(error.errors).forEach(([field, messages]) => {
+          // console.log("field", field, messages);
+          setError(field, {
+            type: "server",
+            message: messages[0],
+          });
+        });
+      }
     }
   };
+
+  console.log("errors", errors);
 
   return (
     <div className="flex justify-center">
@@ -27,41 +47,79 @@ export const CreateUser = () => {
         <form className="space-y-6" onSubmit={handleSubmit(submitForm)}>
           <div>
             <input
-              {...register("fullName")}
+              {...register("fullName", {
+                // required: true,
+                required: "Full name is required",
+                minLength: {
+                  value: 5,
+                  message: "Full name must be at least 5 chars long",
+                },
+              })}
               type="text"
               placeholder="Full Name"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
+
+            {errors.fullName && (
+              <p className="text-red-500 text-sm">{errors.fullName.message}</p>
+            )}
           </div>
 
           {/* Email */}
           <div>
             <input
-              {...register("email")}
+              {...register("email", {
+                required: "Email address is required",
+                pattern: {
+                  value: /.+@.+\..+/,
+                  message: "Please enter a valid email address",
+                },
+              })}
               type="text"
               placeholder="Email Address"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email.message}</p>
+            )}
           </div>
 
           {/* Password */}
           <div>
             <input
-              {...register("password")}
+              {...register("password", {
+                required: "Please enter your password",
+                minLength: {
+                  value: 6,
+                  message: "The password must be 6 chars long",
+                },
+              })}
               type="password"
               placeholder="Password"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
           </div>
 
           {/* Confirm Password */}
           <div>
             <input
-              {...register("password_confirmation")}
+              {...register("password_confirmation", {
+                required: "Please re-enter your password",
+                validate: (value) =>
+                  value === watch("password") || "Passwords do not match",
+              })}
               type="password"
               placeholder="Confirm Password"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
+            {errors.password_confirmation && (
+              <p className="text-red-500 text-sm">
+                {errors.password_confirmation.message}
+              </p>
+            )}
           </div>
 
           {/* Submit button */}

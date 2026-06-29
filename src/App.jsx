@@ -29,6 +29,7 @@ function App() {
             {/* Users Route */}
             <Route path="/dashboard/users" element={<UsersList />} />
             <Route path="/dashboard/users/create" element={<CreateUser />} />
+            <Route path="/dashboard/users/:id/edit" element={<CreateUser />} />
           </Route>
         </Route>
       </Routes>

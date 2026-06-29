@@ -61,9 +61,12 @@ export const UsersList = () => {
                   </td>
                   <td className="border border-gray-200 p-2 text-left">
                     <div className="flex gap-2">
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer">
+                      <Link
+                        to={`/dashboard/users/${user.id}/edit`}
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer"
+                      >
                         Edit
-                      </button>
+                      </Link>
                       <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded cursor-pointer">
                         Delete
                       </button>

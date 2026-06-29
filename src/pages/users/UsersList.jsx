@@ -2,19 +2,49 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { userService } from "../../services/userService";
 import { Link } from "react-router";
+import { ConfirmDialog } from "../../components/ui/ConfirmDialog";
 
 export const UsersList = () => {
   const [users, setUsers] = useState();
   const { token } = useAuth();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  // Fetch Users
   const fetchUsers = async () => {
     const data = await userService.getUsers(token);
     setUsers(data.data);
   };
 
-  //   console.log(users);
+  // Delete User Function
+  const deleteUser = (id) => {
+    setSelectedUserId(id);
+    setDialogOpen(true);
+  };
+
+  // Delete Confirmation
+  const confirmDelete = async () => {
+    try {
+      // delete user function
+      await userService.deleteUser(selectedUserId, token);
+
+      // Refresh the users listing state
+      setUsers((prevUsers) =>
+        prevUsers.filter((user) => user.id !== selectedUserId),
+      );
+    } catch (error) {
+      console.error("Delete error", error);
+    } finally {
+      setDialogOpen(false);
+      setSelectedUserId(null);
+    }
+  };
+
+  // console.log("userid", selectedUserId);
 
   return (
     <>
@@ -59,6 +89,8 @@ export const UsersList = () => {
                   <td className="border border-gray-200 p-2 text-left">
                     {new Date(user.created_at).toLocaleDateString()}
                   </td>
+
+                  {/* Action Buttons */}
                   <td className="border border-gray-200 p-2 text-left">
                     <div className="flex gap-2">
                       <Link
@@ -67,7 +99,10 @@ export const UsersList = () => {
                       >
                         Edit
                       </Link>
-                      <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded cursor-pointer">
+                      <button
+                        onClick={() => deleteUser(user.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
+                      >
                         Delete
                       </button>
                     </div>
@@ -77,6 +112,15 @@ export const UsersList = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Confirm Dialog Component */}
+      <ConfirmDialog
+        open={dialogOpen}
+        onCancel={() => setDialogOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete User"
+        message="Are you sure you want to delete this user? This action cannot be undone."
+      />
     </>
   );
 };

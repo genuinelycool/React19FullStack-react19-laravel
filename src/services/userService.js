@@ -80,4 +80,24 @@ export const userService = {
 
     return result.data;
   },
+
+  // Delete User
+  async deleteUser(id, token) {
+    const response = await fetch(`${API_URL}/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        accept: "application/json",
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw result;
+    }
+
+    return result.data;
+  },
 };

@@ -9,30 +9,38 @@ import { Profile } from "./pages/dashboard/Profile";
 import { AuthProvider } from "./context/AuthContext";
 import { UsersList } from "./pages/users/UsersList";
 import { CreateUser } from "./pages/users/CreateUser";
+import { ViewUser } from "./pages/users/ViewUser";
+import { ToastProvider } from "./context/ToastContext";
 
 function App() {
   return (
     <AuthProvider>
-      <Routes>
-        {/* Public Routes */}
-        <Route element={<PublicRoutes />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Registration />} />
-        </Route>
-
-        {/* Protected Routes */}
-        <Route element={<ProtectedRoutes />}>
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/Profile" element={<Profile />} />
-
-            {/* Users Route */}
-            <Route path="/dashboard/users" element={<UsersList />} />
-            <Route path="/dashboard/users/create" element={<CreateUser />} />
-            <Route path="/dashboard/users/:id/edit" element={<CreateUser />} />
+      <ToastProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route element={<PublicRoutes />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registration />} />
           </Route>
-        </Route>
-      </Routes>
+
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoutes />}>
+            <Route element={<DashboardLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/Profile" element={<Profile />} />
+
+              {/* Users Route */}
+              <Route path="/dashboard/users" element={<UsersList />} />
+              <Route path="/dashboard/users/create" element={<CreateUser />} />
+              <Route
+                path="/dashboard/users/:id/edit"
+                element={<CreateUser />}
+              />
+              <Route path="/dashboard/users/:id" element={<ViewUser />} />
+            </Route>
+          </Route>
+        </Routes>
+      </ToastProvider>
     </AuthProvider>
   );
 }

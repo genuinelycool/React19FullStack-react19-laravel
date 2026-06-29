@@ -3,6 +3,7 @@ import { userService } from "../../services/userService";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
+import { useToast } from "../../context/ToastContext";
 
 export const CreateUser = () => {
   const {
@@ -16,6 +17,7 @@ export const CreateUser = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
+  const { showToast } = useToast();
 
   const isEdit = Boolean(id);
 
@@ -40,13 +42,21 @@ export const CreateUser = () => {
   //   Form submit
   const submitForm = async (data) => {
     try {
+      let response = null;
       if (isEdit) {
         // update
-        await userService.updateUser(id, data, token);
+        response = await userService.updateUser(id, data, token);
+
+        // Use Toast
+        // showToast("updated", "success");
       } else {
         // create
-        await userService.createUser(data, token);
+        response = await userService.createUser(data, token);
       }
+
+      // Use Toast
+      showToast(response.message, response.success ? "success" : "error");
+
       navigate("/dashboard/users");
     } catch (error) {
       // console.error(error.errors);

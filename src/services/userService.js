@@ -78,7 +78,7 @@ export const userService = {
       throw result;
     }
 
-    return result.data;
+    return result;
   },
 
   // Delete User
@@ -98,6 +98,6 @@ export const userService = {
       throw result;
     }
 
-    return result.data;
+    return result;
   },
 };

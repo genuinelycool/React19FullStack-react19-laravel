@@ -3,12 +3,15 @@ import { useAuth } from "../../context/AuthContext";
 import { userService } from "../../services/userService";
 import { Link } from "react-router";
 import { ConfirmDialog } from "../../components/ui/ConfirmDialog";
+import { Toast } from "../../components/ui/Toast";
+import { useToast } from "../../context/ToastContext";
 
 export const UsersList = () => {
   const [users, setUsers] = useState();
   const { token } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     fetchUsers();
@@ -30,7 +33,10 @@ export const UsersList = () => {
   const confirmDelete = async () => {
     try {
       // delete user function
-      await userService.deleteUser(selectedUserId, token);
+      const response = await userService.deleteUser(selectedUserId, token);
+
+      // Use Toast
+      showToast(response.message, response.success ? "success" : "error");
 
       // Refresh the users listing state
       setUsers((prevUsers) =>
@@ -94,11 +100,19 @@ export const UsersList = () => {
                   <td className="border border-gray-200 p-2 text-left">
                     <div className="flex gap-2">
                       <Link
+                        to={`/dashboard/users/${user.id}`}
+                        className="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1 rounded cursor-pointer"
+                      >
+                        View
+                      </Link>
+
+                      <Link
                         to={`/dashboard/users/${user.id}/edit`}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded cursor-pointer"
                       >
                         Edit
                       </Link>
+
                       <button
                         onClick={() => deleteUser(user.id)}
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
@@ -121,6 +135,9 @@ export const UsersList = () => {
         title="Delete User"
         message="Are you sure you want to delete this user? This action cannot be undone."
       />
+
+      {/* Toast */}
+      {/* <Toast /> */}
     </>
   );
 };

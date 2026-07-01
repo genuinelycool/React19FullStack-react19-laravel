@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { userService } from "../../services/userService";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { ConfirmDialog } from "../../components/ui/ConfirmDialog";
 import { Toast } from "../../components/ui/Toast";
 import { useToast } from "../../context/ToastContext";
@@ -13,18 +13,37 @@ export const UsersList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const { showToast } = useToast();
-  const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({});
-  const [search, setSearch] = useState("");
 
-  console.log("search", search);
+  // console.log(useSearchParams());
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(searchParams.get("page") || 1);
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+
+  // console.log(
+  //   "searchParams",
+  //   searchParams.get("search"),
+  //   searchParams.get("page"),
+  // );
+
+  // console.log("search", search);
 
   useEffect(() => {
-    const delay = setTimeout(() => {
-      fetchUsers();
-    }, 1000);
+    const params = {};
 
-    return () => clearTimeout(delay);
+    if (search) params.search = search;
+    if (page > 1) params.page = page;
+
+    setSearchParams(params);
+
+    if (search) {
+      const delay = setTimeout(() => {
+        fetchUsers();
+      }, 500);
+      return () => clearTimeout(delay);
+    } else {
+      fetchUsers();
+    }
   }, [page, search]);
 
   // Fetch Users
@@ -77,16 +96,32 @@ export const UsersList = () => {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold mb-4">Users List</h2>
 
-          {/* Search filter */}
-          <input
-            type="text"
-            placeholder="Search users..."
-            className="w-full max-w-sm px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-          />
+          <div className="flex items-center gap-3">
+            {/* Search filter */}
+            <input
+              type="text"
+              value={search}
+              placeholder="Search users..."
+              className="w-full max-w-sm px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+            />
+
+            {/* Clear Button */}
+            {search && (
+              <button
+                onClick={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+                className="px-3 py-2 bg-gray-600 text-white cursor-pointer hover:bg-gray-700 rounded"
+              >
+                Clear
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Users Listing */}

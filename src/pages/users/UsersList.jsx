@@ -15,14 +15,21 @@ export const UsersList = () => {
   const { showToast } = useToast();
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({});
+  const [search, setSearch] = useState("");
+
+  console.log("search", search);
 
   useEffect(() => {
-    fetchUsers();
-  }, [page]);
+    const delay = setTimeout(() => {
+      fetchUsers();
+    }, 1000);
+
+    return () => clearTimeout(delay);
+  }, [page, search]);
 
   // Fetch Users
   const fetchUsers = async () => {
-    const res = await userService.getUsers(token, page);
+    const res = await userService.getUsers(token, page, search);
     setUsers(res.data);
     setPagination(res);
   };
@@ -67,7 +74,20 @@ export const UsersList = () => {
         </Link>
       </div>
       <div className="bg-white shadow rounded p-6">
-        <h2 className="text-xl font-semibold mb-4">Users List</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold mb-4">Users List</h2>
+
+          {/* Search filter */}
+          <input
+            type="text"
+            placeholder="Search users..."
+            className="w-full max-w-sm px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+          />
+        </div>
 
         {/* Users Listing */}
         <table className="w-full border-collapse">

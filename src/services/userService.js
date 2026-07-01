@@ -2,8 +2,8 @@ const API_URL = "http://localhost:8000/api";
 
 export const userService = {
   // Get Users
-  async getUsers(token) {
-    const response = await fetch(`${API_URL}/users`, {
+  async getUsers(token, page) {
+    const response = await fetch(`${API_URL}/users?page=${page}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

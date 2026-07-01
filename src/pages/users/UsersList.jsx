@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { ConfirmDialog } from "../../components/ui/ConfirmDialog";
 import { Toast } from "../../components/ui/Toast";
 import { useToast } from "../../context/ToastContext";
+import { Pagination } from "../../components/ui/Pagination";
 
 export const UsersList = () => {
   const [users, setUsers] = useState();
@@ -12,15 +13,18 @@ export const UsersList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const { showToast } = useToast();
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({});
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [page]);
 
   // Fetch Users
   const fetchUsers = async () => {
-    const data = await userService.getUsers(token);
-    setUsers(data.data);
+    const res = await userService.getUsers(token, page);
+    setUsers(res.data);
+    setPagination(res);
   };
 
   // Delete User Function
@@ -125,6 +129,16 @@ export const UsersList = () => {
               ))}
           </tbody>
         </table>
+
+        {/* Custom Pagination */}
+        <Pagination
+          currentPage={pagination.current_page}
+          lastPage={pagination.last_page}
+          onPageChange={(page) => setPage(page)}
+          from={pagination.from}
+          to={pagination.to}
+          total={pagination.total}
+        />
       </div>
 
       {/* Confirm Dialog Component */}

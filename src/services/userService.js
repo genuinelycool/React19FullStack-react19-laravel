@@ -115,4 +115,24 @@ export const userService = {
 
     return result;
   },
+
+  //  Toggle Status
+  async toggleStatus(id, token) {
+    const response = await fetch(`${API_URL}/users/toggle-status/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        accept: "application/json",
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw result;
+    }
+
+    return result;
+  },
 };

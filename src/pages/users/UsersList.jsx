@@ -116,7 +116,26 @@ export const UsersList = () => {
     }
   };
 
-  console.log("sort", sort, "order", order);
+  // console.log("sort", sort, "order", order);
+
+  // Toggle Status
+  const toggleUserStatus = async (id) => {
+    try {
+      const response = await userService.toggleStatus(id, token);
+
+      // Use Toast
+      showToast(response.message, response.success ? "success" : "error");
+
+      // Refresh the users listing state
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === id ? { ...user, status: response.data.status } : user,
+        ),
+      );
+    } catch (error) {
+      console.error("Toggle status error", error);
+    }
+  };
 
   return (
     <>
@@ -196,6 +215,16 @@ export const UsersList = () => {
                   Created At {renderSortIcons("created_at")}
                 </div>
               </th>
+
+              <th
+                onClick={() => handleSort("status")}
+                className="cursor-pointer border border-gray-200 p-2 text-left"
+              >
+                <div className="flex items-center gap-1 group">
+                  Status {renderSortIcons("status")}
+                </div>
+              </th>
+
               <th className="border border-gray-200 p-2 text-left">Action</th>
             </tr>
           </thead>
@@ -217,6 +246,15 @@ export const UsersList = () => {
                     {new Date(user.created_at).toLocaleDateString()}
                   </td>
 
+                  {/* Status */}
+                  <td className="border border-gray-200 p-2 text-left">
+                    <span
+                      className={`px-2 py-1 rounded ${user.status === 1 ? "bg-green-200 text-green-700" : "bg-gray-200 text-gray-600"}`}
+                    >
+                      {user.status === 1 ? "Active" : "In-active"}
+                    </span>
+                  </td>
+
                   {/* Action Buttons */}
                   <td className="border border-gray-200 p-2 text-left">
                     <div className="flex gap-2">
@@ -234,9 +272,18 @@ export const UsersList = () => {
                         Edit
                       </Link>
 
+                      {/* Status Action */}
+                      <button
+                        onClick={() => toggleUserStatus(user.id)}
+                        className={`${user.status === 1 ? "bg-yellow-600 hover:bg-yellow-700" : "bg-green-600 hover:bg-green-700"} text-white px-3 py-1 rounded cursor-pointer`}
+                      >
+                        {user.status === 1 ? "Deactivate" : "Activate"}
+                      </button>
+
+                      {/* Delete user */}
                       <button
                         onClick={() => deleteUser(user.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
+                        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded cursor-pointer"
                       >
                         Delete
                       </button>

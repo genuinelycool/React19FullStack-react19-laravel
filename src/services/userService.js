@@ -2,7 +2,7 @@ const API_URL = "http://localhost:8000/api";
 
 export const userService = {
   // Get Users
-  async getUsers(token, page, search, sort, order) {
+  async getUsers(token, page, search, sort, order, status) {
     // if (search) {
     //   url += `&search=${search}`;
     // }
@@ -12,6 +12,7 @@ export const userService = {
       ...(search && { search }),
       ...(sort && { sort }),
       ...(sort && order && { order }),
+      ...(status && { status }),
     });
 
     const url = `${API_URL}/users?${urlParams.toString()}`;

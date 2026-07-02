@@ -22,6 +22,7 @@ export const UsersList = () => {
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [sort, setSort] = useState(searchParams.get("sort") || "");
   const [order, setOrder] = useState(searchParams.get("order") || "desc");
+  const [status, setStatus] = useState(searchParams.get("status") || "");
 
   // console.log(
   //   "searchParams",
@@ -42,6 +43,9 @@ export const UsersList = () => {
     if (sort) params.sort = sort;
     if (sort && order) params.order = order;
 
+    // Filter
+    if (status) params.status = status;
+
     setSearchParams(params);
 
     if (search) {
@@ -52,11 +56,18 @@ export const UsersList = () => {
     } else {
       fetchUsers();
     }
-  }, [page, search, sort, order]);
+  }, [page, search, sort, order, status]);
 
   // Fetch Users
   const fetchUsers = async () => {
-    const res = await userService.getUsers(token, page, search, sort, order);
+    const res = await userService.getUsers(
+      token,
+      page,
+      search,
+      sort,
+      order,
+      status,
+    );
     setUsers(res.data);
     setPagination(res);
   };
@@ -127,11 +138,13 @@ export const UsersList = () => {
       showToast(response.message, response.success ? "success" : "error");
 
       // Refresh the users listing state
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.id === id ? { ...user, status: response.data.status } : user,
-        ),
-      );
+      fetchUsers();
+
+      // setUsers((prevUsers) =>
+      //   prevUsers.map((user) =>
+      //     user.id === id ? { ...user, status: response.data.status } : user,
+      //   ),
+      // );
     } catch (error) {
       console.error("Toggle status error", error);
     }
@@ -152,6 +165,20 @@ export const UsersList = () => {
           <h2 className="text-xl font-semibold mb-4">Users List</h2>
 
           <div className="flex items-center gap-3">
+            {/* Dropdown for Status filter */}
+            <select
+              value={status}
+              onChange={(e) => {
+                setStatus(e.target.value);
+                setPage(1);
+              }}
+              className="px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              <option value="">All</option>
+              <option value="1">Active</option>
+              <option value="0">In-active</option>
+            </select>
+
             {/* Search filter */}
             <input
               type="text"
@@ -169,6 +196,7 @@ export const UsersList = () => {
               <button
                 onClick={() => {
                   setSearch("");
+                  setStatus("");
                   setPage(1);
                 }}
                 className="px-3 py-2 bg-gray-600 text-white cursor-pointer hover:bg-gray-700 rounded"

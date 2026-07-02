@@ -2,12 +2,22 @@ const API_URL = "http://localhost:8000/api";
 
 export const userService = {
   // Get Users
-  async getUsers(token, page, search) {
-    let url = `${API_URL}/users?page=${page}`;
+  async getUsers(token, page, search, sort, order) {
+    // if (search) {
+    //   url += `&search=${search}`;
+    // }
 
-    if (search) {
-      url += `&search=${search}`;
-    }
+    const urlParams = new URLSearchParams({
+      page,
+      ...(search && { search }),
+      ...(sort && { sort }),
+      ...(sort && order && { order }),
+    });
+
+    const url = `${API_URL}/users?${urlParams.toString()}`;
+
+    // console.log(urlParams.toString());
+
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,

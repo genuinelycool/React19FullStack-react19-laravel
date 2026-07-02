@@ -33,7 +33,7 @@ export const Pagination = ({
     pages.push(lastPage);
   }
 
-  console.log("pages", pages);
+  // console.log("pages", pages);
 
   return (
     <div className="flex items-center justify-between">

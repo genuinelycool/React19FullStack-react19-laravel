@@ -136,4 +136,26 @@ export const userService = {
 
     return result;
   },
+
+  // Delete User
+  async bulkDeleteUser(ids, token) {
+    const response = await fetch(`${API_URL}/users/bulk-delete`, {
+      // method: "DELETE",
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({ ids }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw result;
+    }
+
+    return result;
+  },
 };

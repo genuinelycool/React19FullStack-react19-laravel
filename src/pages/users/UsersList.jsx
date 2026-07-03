@@ -9,7 +9,7 @@ import { Pagination } from "../../components/ui/Pagination";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 
 export const UsersList = () => {
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
   const { token } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -23,6 +23,7 @@ export const UsersList = () => {
   const [sort, setSort] = useState(searchParams.get("sort") || "");
   const [order, setOrder] = useState(searchParams.get("order") || "desc");
   const [status, setStatus] = useState(searchParams.get("status") || "");
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   // console.log(
   //   "searchParams",
@@ -150,12 +151,50 @@ export const UsersList = () => {
     }
   };
 
+  // Handle Select All
+  const handleSelectAll = (checked) => {
+    // console.log("checked", checked);
+
+    if (checked) {
+      // console.log(users.map((user) => user.id));
+
+      setSelectedUsers(users.map((user) => user.id));
+    } else {
+      setSelectedUsers([]);
+    }
+  };
+
+  // Handle Single Select User
+  const handleSelectUser = (id) => {
+    setSelectedUsers((prev) =>
+      prev.includes(id) ? prev.filter((userId) => userId != id) : [...prev, id],
+    );
+  };
+
+  // Bulk delete users
+  const bulkDeleteUsers = async () => {
+    try {
+      const response = await userService.bulkDeleteUser(selectedUsers, token);
+
+      // Use Toast
+      showToast(response.message, response.success ? "success" : "error");
+
+      // Refresh the users listing state
+      fetchUsers();
+      setSelectedUsers([]);
+    } catch (error) {
+      console.error("Toggle status error", error);
+    }
+  };
+
+  console.log("selected users", selectedUsers);
+
   return (
     <>
       <div className="flex justify-end mb-4">
         <Link
           to="/dashboard/users/create"
-          className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded"
+          className="cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded"
         >
           Create User
         </Link>
@@ -165,6 +204,16 @@ export const UsersList = () => {
           <h2 className="text-xl font-semibold mb-4">Users List</h2>
 
           <div className="flex items-center gap-3">
+            {/* Bulk Delete Action Button */}
+            {selectedUsers.length > 0 && (
+              <button
+                onClick={bulkDeleteUsers}
+                className="cursor-pointer h-[40px] w-full bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+              >
+                Delete Users ({selectedUsers.length})
+              </button>
+            )}
+
             {/* Dropdown for Status filter */}
             <select
               value={status}
@@ -211,6 +260,18 @@ export const UsersList = () => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100">
+              {/* Select All */}
+              <th className="border border-gray-200 p-2 text-left">
+                <div className="flex items-center gap-1 group">
+                  <input
+                    type="checkbox"
+                    className="w-5 h-5 cursor-pointer accent-blue-500"
+                    checked={selectedUsers.length === users.length}
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                  />
+                </div>
+              </th>
+
               <th
                 onClick={() => handleSort("id")}
                 className="cursor-pointer border border-gray-200 p-2 text-left"
@@ -219,6 +280,7 @@ export const UsersList = () => {
                   ID {renderSortIcons("id")}
                 </div>
               </th>
+
               <th
                 onClick={() => handleSort("name")}
                 className="cursor-pointer border border-gray-200 p-2 text-left"
@@ -261,6 +323,18 @@ export const UsersList = () => {
             {users &&
               users.map((user) => (
                 <tr key={user.id}>
+                  {/* Checkbox - Select User */}
+                  <td className="border border-gray-200 p-2 text-left">
+                    <div className="flex items-center gap-1 group">
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 cursor-pointer accent-blue-500"
+                        checked={selectedUsers.includes(user.id)}
+                        onChange={() => handleSelectUser(user.id)}
+                      />
+                    </div>
+                  </td>
+
                   <td className="border border-gray-200 p-2 text-left">
                     {user.id}
                   </td>

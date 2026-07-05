@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { userService } from "../../services/userService";
 import { Link, useSearchParams } from "react-router";
@@ -25,6 +25,9 @@ export const UsersList = () => {
   const [status, setStatus] = useState(searchParams.get("status") || "");
   const [selectedUsers, setSelectedUsers] = useState([]);
 
+  // Create ref
+  const controllerRef = useRef(null);
+
   // console.log(
   //   "searchParams",
   //   searchParams.get("search"),
@@ -49,28 +52,56 @@ export const UsersList = () => {
 
     setSearchParams(params);
 
-    if (search) {
-      const delay = setTimeout(() => {
-        fetchUsers();
-      }, 500);
-      return () => clearTimeout(delay);
-    } else {
-      fetchUsers();
-    }
+    // if (search) {
+    //   const delay = setTimeout(() => {
+    //     fetchUsers();
+    //   }, 500);
+    //   return () => clearTimeout(delay);
+    // } else {
+    //   fetchUsers();
+    // }
+    fetchUsers();
   }, [page, search, sort, order, status]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+    };
+  }, []);
 
   // Fetch Users
   const fetchUsers = async () => {
-    const res = await userService.getUsers(
-      token,
-      page,
-      search,
-      sort,
-      order,
-      status,
-    );
-    setUsers(res.data);
-    setPagination(res);
+    // Cancel the previous request
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+    }
+
+    // Create new controller
+    const controller = new AbortController();
+    controllerRef.current = controller;
+
+    console.log("controller", controller);
+
+    try {
+      const res = await userService.getUsers(
+        token,
+        page,
+        search,
+        sort,
+        order,
+        status,
+        controller.signal,
+      );
+      setUsers(res.data);
+      setPagination(res);
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Fetch users error: ", error);
+      }
+    }
   };
 
   // Delete User Function
